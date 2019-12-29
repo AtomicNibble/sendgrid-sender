@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"os"
 
 	nmail "net/mail"
 
 	"github.com/gobuffalo/buffalo/mail"
+	"github.com/gobuffalo/envy"
 	sendgrid "github.com/sendgrid/sendgrid-go"
 	smail "github.com/sendgrid/sendgrid-go/helpers/mail"
 	"github.com/stanislas-m/mocksmtp"
@@ -36,7 +36,7 @@ func (ps SendgridSender) Send(m mail.Message) error {
 		return errors.New("you must specify at least 2 bodies HTML and plain text")
 	}
 
-	if os.Getenv("GO_ENV") == "test" {
+	if envy.Get("GO_ENV", "") == "test" {
 		return ps.TestSender.Send(m)
 	}
 
